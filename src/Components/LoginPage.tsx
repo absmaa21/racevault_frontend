@@ -4,18 +4,8 @@ import logo from '../assets/logo_light.png'
 import discordLogo from '../assets/discord.svg'
 
 function LoginPage() {
-    useEffect(() => {
-        fetch('http://localhost:3001')
-            .then(r => r.json())
-            .then(data => {
-                if(data.loggedIn) {
-                    window.location.href = data.redirectUrl
-                }
-            })
-    }, [])
-
     return (
-        <div className="bg-dark vh-100 text-center bg-gradient">
+        <div className="bg-dark vh-100 vw-100 text-center bg-gradient">
             <img className={'h-50'} src={logo} alt={'logo'}/>
 
             <h2 className={'text-white mb-4'}>Login with</h2>

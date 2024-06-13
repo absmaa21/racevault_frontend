@@ -6,11 +6,11 @@ import '../css/sb-admin-2.css'
 
 function Layout() {
     const location = useLocation();
-    const noLayoutRoutes = ['/login'];
+    const noLayoutRoutes = ['/login', '/register'];
     const showLayout = !noLayoutRoutes.includes(location.pathname);
 
     return (
-        <div className={'d-flex'} >
+        <div className={'d-flex'}>
             {showLayout && (
                 <ul className={'navbar-nav bg-gradient-primary sidebar sidebar-dark accordion'}>
                     <a className={'sidebar-brand'} href={'/'}>
@@ -27,7 +27,7 @@ function Layout() {
                     <NavItem path={'/races'} title={'Races'}/>
                 </ul>
             )}
-            <div className={'d-flex flex-fill bg-gradient-dark'} >
+            <div className={'d-flex flex-fill bg-gradient-dark'}>
                 <Outlet/>
             </div>
         </div>
