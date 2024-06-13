@@ -1,0 +1,40 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Höhe des gesamten Viewports */
+    background-color: #f0f0f0; /* Optional: Hintergrundfarbe für die Seite */
+}
+
+.login-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-box label,
+.login-box input {
+    margin: 5px 0;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+}
+
+.button-container button {
+    flex: 1;
+    margin: 10px;
+}
+
+.register-text {
+    margin-top: 10px;
+
+}
