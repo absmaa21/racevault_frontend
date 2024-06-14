@@ -1,13 +1,26 @@
-import React from 'react';
-import {Outlet, useLocation} from "react-router-dom";
+import React, {useContext, useEffect} from 'react';
+import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import NavItem from "./NavItem";
 import Logo from '../assets/logo-wide.svg'
 import '../css/sb-admin-2.css'
+import {UserContext} from "../contexts/UserContext";
 
 function Layout() {
+    const navigation = useNavigate()
+    const {UserID, Login, Logout} = useContext(UserContext)!
+
     const location = useLocation();
     const noLayoutRoutes = ['/login', '/register'];
     const showLayout = !noLayoutRoutes.includes(location.pathname);
+
+    useEffect(() => {
+        if(!UserID) {
+            navigation('/login')
+            return;
+        }
+        if(showLayout) return;
+        navigation('/')
+    }, [UserID, navigation, showLayout]);
 
     return (
         <div className={'d-flex'}>

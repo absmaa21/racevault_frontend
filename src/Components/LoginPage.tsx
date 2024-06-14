@@ -1,13 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import '../css/LoginPage.css'
 import config from "../config";
 import Logo from '../assets/logo.png'
 import {useNavigate} from "react-router-dom";
+import {UserContext} from "../contexts/UserContext";
 
 function LoginPage() {
     const navigation = useNavigate()
+    const {UserID, Login, Logout} = useContext(UserContext)!;
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [remember, setRemember] = useState(false)
     const [errorMessage, setErrorMessage] = useState('');
 
     const emailRegex = RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-z0-9.-]+\\.[a-zA-Z]{2,}$')
@@ -21,8 +25,7 @@ function LoginPage() {
         }
 
         try {
-            console.log('Login with email:', email, 'and password:', password);
-            const response = await fetch(config.backendUrl + '/user/register', {
+            const response = await fetch(config.backendUrl + '/user/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -32,7 +35,9 @@ function LoginPage() {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Login successful', data);
+                Login(data._id, remember)
+                console.log('Login successful with: ', data._id)
+                navigation('/')
                 return;
             }
 
@@ -41,7 +46,7 @@ function LoginPage() {
             console.error('something went wrong: ', response)
         } catch (error) {
             console.error('registering failed', error);
-            // Handle error cases
+            setErrorMessage('Something went wrong.')
         }
     };
 
@@ -84,6 +89,16 @@ function LoginPage() {
                                                 onChange={(e) => setPassword(e.target.value)}
                                                 required
                                             />
+                                        </div>
+                                        <div className="form-group">
+                                            <div className="custom-control custom-checkbox small">
+                                                <input type="checkbox"
+                                                       className="custom-control-input"
+                                                       id="customCheck"
+                                                       checked={remember}
+                                                       onChange={(e) => setRemember(e.target.checked)}/>
+                                                <label className="custom-control-label" htmlFor="customCheck">Remember Me</label>
+                                            </div>
                                         </div>
                                         <h3 className={'invalid-feedback d-block text-center'}
                                             style={{minHeight: 16}}>{errorMessage}</h3>
