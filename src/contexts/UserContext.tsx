@@ -1,9 +1,10 @@
 import React, {createContext, useState, useEffect, ReactNode, FC} from 'react';
+import {IUser} from "../pojos/interface";
 
 interface UserContextType {
-    UserID: string | null;
-    Login: (userID: string, remember?: boolean) => void;
-    Logout: () => void;
+    user: IUser | null;
+    login: (user: IUser, remember?: boolean) => void;
+    logout: () => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -13,27 +14,27 @@ interface UserProviderProps {
 }
 
 const UserProvider: FC<UserProviderProps> = ({children}: any) => {
-    const [UserID, setUserId] = useState<string | null>(null);
+    const [user, setUser] = useState<IUser | null>(null);
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
-            setUserId(storedUser);
+            setUser(JSON.parse(storedUser))
         }
     }, []);
 
-    const Login = (id: string, remember?: boolean) => {
-        setUserId(id);
-        if(remember) localStorage.setItem('user', id);
+    const login = (user: IUser, remember?: boolean) => {
+        setUser(user);
+        if(remember) localStorage.setItem('user', JSON.stringify(user));
     };
 
-    const Logout = () => {
-        setUserId(null);
+    const logout = () => {
+        setUser(null);
         localStorage.removeItem('user');
     };
 
     return (
-        <UserContext.Provider value={{UserID, Login, Logout}}>
+        <UserContext.Provider value={{user, login, logout}}>
             {children}
         </UserContext.Provider>
     );

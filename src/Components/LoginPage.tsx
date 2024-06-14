@@ -7,7 +7,7 @@ import {UserContext} from "../contexts/UserContext";
 
 function LoginPage() {
     const navigation = useNavigate()
-    const {UserID, Login, Logout} = useContext(UserContext)!;
+    const User = useContext(UserContext)!;
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -35,7 +35,7 @@ function LoginPage() {
 
             if (response.ok) {
                 const data = await response.json();
-                Login(data._id, remember)
+                User.login(data._id, remember)
                 console.log('Login successful with: ', data._id)
                 navigation('/')
                 return;
@@ -108,9 +108,9 @@ function LoginPage() {
                                     </form>
                                     <hr/>
                                     <div className="text-center">
-                                        <a className="small" onClick={() => navigation('/register')}>
-                                            Create new account.
-                                        </a>
+                                        <button className="btn btn-link btn-sm" onClick={() => navigation('/register')}>
+                                            Create new account
+                                        </button>
                                     </div>
                                 </div>
                             </div>

@@ -73,9 +73,9 @@ function RegisterPage() {
                                     <img src={Logo} alt={'Logo'} className={'img-fluid'}/>
                                 </div>
                                 <div className="col-lg-6 p-5">
-                                        <div className="text-center">
-                                            <h1 className="h4 text-gray-900 mb-4">Create an free account!</h1>
-                                        </div>
+                                    <div className="text-center">
+                                        <h1 className="h4 text-gray-900 mb-4">Create an free account!</h1>
+                                    </div>
                                     <form className="user" onSubmit={handleSubmit}>
                                         <div className="form-group">
                                             <input
@@ -110,7 +110,7 @@ function RegisterPage() {
                                         </div>
                                         <div className="form-group">
                                             <input
-                                                type="text"
+                                                type="url"
                                                 className="form-control form-control-user"
                                                 placeholder="Profile picture as link"
                                                 value={picture}
@@ -125,9 +125,9 @@ function RegisterPage() {
                                     </form>
                                     <hr/>
                                     <div className="text-center">
-                                        <a className="small" onClick={() => navigation('/login')}>
-                                            Log in existing account.
-                                        </a>
+                                        <button className="btn btn-link btn-sm" onClick={() => navigation('/login')}>
+                                            Log in existing account
+                                        </button>
                                     </div>
                                 </div>
                             </div>
