@@ -18,7 +18,7 @@ function RegisterPage() {
         e.preventDefault()
 
         if(!emailRegex.test(email)) {
-            setErrorMessage('Invalid E-mail!')
+            setErrorMessage('Invalid Email!')
             return;
         }
 
@@ -54,7 +54,7 @@ function RegisterPage() {
             console.error('something went wrong: ', response)
         } catch (error) {
             console.error('registering failed', error);
-            // Handle error cases
+            setErrorMessage('Something went wrong.')
         }
     };
 

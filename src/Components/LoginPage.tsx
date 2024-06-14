@@ -20,7 +20,7 @@ function LoginPage() {
         e.preventDefault()
 
         if(!emailRegex.test(email)) {
-            setErrorMessage('Invalid E-mail!')
+            setErrorMessage('Invalid Email!')
             return;
         }
 
@@ -45,7 +45,7 @@ function LoginPage() {
             setErrorMessage(r.error)
             console.error('something went wrong: ', response)
         } catch (error) {
-            console.error('registering failed', error);
+            console.error('login failed', error);
             setErrorMessage('Something went wrong.')
         }
     };
