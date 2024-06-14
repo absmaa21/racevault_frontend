@@ -15,7 +15,7 @@ function Layout() {
 
     useEffect(() => {
         if(!UserID) {
-            navigation('/login')
+            if(showLayout) navigation('/login')
             return;
         }
         if(showLayout) return;
