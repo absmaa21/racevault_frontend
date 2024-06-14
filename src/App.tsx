@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import '../node_modules/startbootstrap-sb-admin-2/css/sb-admin-2.css'
 import RegisterPage from './Components/RegisterPage';
 import LoginPage from './Components/LoginPage';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';

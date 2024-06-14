@@ -35,7 +35,7 @@ function LoginPage() {
 
             if (response.ok) {
                 const data = await response.json();
-                User.login(data._id, remember)
+                User.login(data, remember)
                 console.log('Login successful with: ', data._id)
                 navigation('/')
                 return;
