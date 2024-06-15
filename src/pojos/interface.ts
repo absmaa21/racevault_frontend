@@ -14,7 +14,6 @@ export interface IUserRace {
     game: string,
     event: string,
     circuit: string,
-    race: string,
     vehicle: string,
     position_qualifying_overall: number,
     position_race_overall: number,
