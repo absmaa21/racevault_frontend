@@ -1,3 +1,7 @@
+.btn-hover:active {
+    background-color: #00000022;
+}
+
 .btn-hover:hover {
     background-color: #00000022;
 }

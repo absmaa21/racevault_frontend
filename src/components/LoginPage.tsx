@@ -1,15 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import '../css/LoginPage.css'
 import config from "../config";
 import Logo from '../assets/logo.png'
 import {useNavigate} from "react-router-dom";
+import {UserContext} from "../contexts/UserContext";
 
-function RegisterPage() {
+function LoginPage() {
     const navigation = useNavigate()
-    const [username, setUsername] = useState('');
-    const [picture, setPicture] = useState('');
+    const User = useContext(UserContext)!;
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [remember, setRemember] = useState(true)
     const [errorMessage, setErrorMessage] = useState('');
 
     const emailRegex = RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-z0-9.-]+\\.[a-zA-Z]{2,}$')
@@ -22,30 +24,20 @@ function RegisterPage() {
             return;
         }
 
-        let usernameToInsert = username;
-        if(username.length <= 0) {
-            usernameToInsert = email.substring(0, email.indexOf('@'));
-        }
-
-        let pictureToInsert = picture;
-        if(picture.length <= 0) {
-            pictureToInsert = 'https://ui-avatars.com/api/?name=' + usernameToInsert;
-        }
-
         try {
-            console.log('registering with email:', email, 'and password:', password);
-            const response = await fetch(config.backendUrl + '/user/register', {
+            const response = await fetch(config.backendUrl + '/user/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({email, password, username: usernameToInsert, picture: pictureToInsert})
+                body: JSON.stringify({email, password})
             });
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Register successful', data);
-                navigation('/login')
+                User.login(data, remember)
+                console.log('Login successful with: ', data._id)
+                navigation('/')
                 return;
             }
 
@@ -53,7 +45,7 @@ function RegisterPage() {
             setErrorMessage(r.error)
             console.error('something went wrong: ', response)
         } catch (error) {
-            console.error('registering failed', error);
+            console.error('login failed', error);
             setErrorMessage('Something went wrong.')
         }
     };
@@ -74,7 +66,7 @@ function RegisterPage() {
                                 </div>
                                 <div className="col-lg-6 p-5">
                                     <div className="text-center">
-                                        <h1 className="h4 text-gray-900 mb-4">Create an free account!</h1>
+                                        <h1 className="h4 text-gray-900 mb-4">Welcome back!</h1>
                                     </div>
                                     <form className="user" onSubmit={handleSubmit}>
                                         <div className="form-group">
@@ -82,7 +74,7 @@ function RegisterPage() {
                                                 type="email"
                                                 className="form-control form-control-user"
                                                 aria-describedby="emailHelp"
-                                                placeholder="Email address*"
+                                                placeholder="Email address"
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 required
@@ -92,41 +84,32 @@ function RegisterPage() {
                                             <input
                                                 type="password"
                                                 className="form-control form-control-user"
-                                                placeholder="Password*"
+                                                placeholder="Password"
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                                 required
                                             />
                                         </div>
-                                        <hr/>
                                         <div className="form-group">
-                                            <input
-                                                type="text"
-                                                className="form-control form-control-user"
-                                                placeholder="Username"
-                                                value={username}
-                                                onChange={(e) => setUsername(e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <input
-                                                type="url"
-                                                className="form-control form-control-user"
-                                                placeholder="Profile picture as link"
-                                                value={picture}
-                                                onChange={(e) => setPicture(e.target.value)}
-                                            />
+                                            <div className="custom-control custom-checkbox small">
+                                                <input type="checkbox"
+                                                       className="custom-control-input"
+                                                       id="customCheck"
+                                                       checked={remember}
+                                                       onChange={(e) => setRemember(e.target.checked)}/>
+                                                <label className="custom-control-label" htmlFor="customCheck">Remember Me</label>
+                                            </div>
                                         </div>
                                         <h3 className={'invalid-feedback d-block text-center'}
                                             style={{minHeight: 16}}>{errorMessage}</h3>
                                         <button type="submit" className="btn btn-primary btn-user btn-block">
-                                            Register
+                                            Login
                                         </button>
                                     </form>
                                     <hr/>
                                     <div className="text-center">
-                                        <button className="btn btn-link btn-sm" onClick={() => navigation('/login')}>
-                                            Log in existing account
+                                        <button className="btn btn-link btn-sm" onClick={() => navigation('/register')}>
+                                            Create new account
                                         </button>
                                     </div>
                                 </div>
@@ -139,4 +122,4 @@ function RegisterPage() {
     );
 }
 
-export default RegisterPage;
+export default LoginPage;

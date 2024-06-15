@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
 import '../node_modules/startbootstrap-sb-admin-2/css/sb-admin-2.css'
-import RegisterPage from './Components/RegisterPage';
-import LoginPage from './Components/LoginPage';
+import RegisterPage from './components/RegisterPage';
+import LoginPage from './components/LoginPage';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import OverviewPage from "./Components/OverviewPage";
-import Layout from "./Components/Layout";
-import InputPage from "./Components/InputPage";
+import OverviewPage from "./components/OverviewPage";
+import Layout from "./components/Layout";
+import InputPage from "./components/InputPage";
 import {UserProvider} from "./contexts/UserContext";
 
 function App() {

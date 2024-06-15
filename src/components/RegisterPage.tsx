@@ -1,43 +1,64 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../css/LoginPage.css'
 import config from "../config";
 import Logo from '../assets/logo.png'
 import {useNavigate} from "react-router-dom";
-import {UserContext} from "../contexts/UserContext";
 
-function LoginPage() {
+function RegisterPage() {
     const navigation = useNavigate()
-    const User = useContext(UserContext)!;
-
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [remember, setRemember] = useState(false)
+    const [form, setForm] = useState({
+        email: '',
+        password: '',
+        username: '',
+        picture: '',
+    })
     const [errorMessage, setErrorMessage] = useState('');
-
     const emailRegex = RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-z0-9.-]+\\.[a-zA-Z]{2,}$')
+
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setForm((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value
+        }))
+    }
 
     const handleSubmit = async (e: any) => {
         e.preventDefault()
 
-        if(!emailRegex.test(email)) {
+        if (!emailRegex.test(form.email)) {
             setErrorMessage('Invalid Email!')
             return;
         }
 
+        let usernameToInsert = form.username;
+        if (form.username.length <= 0) {
+            usernameToInsert = form.email.substring(0, form.email.indexOf('@'));
+        }
+
+        let pictureToInsert = form.picture;
+        if (form.picture.length <= 0) {
+            pictureToInsert = 'https://ui-avatars.com/api/?name=' + usernameToInsert;
+        }
+
         try {
-            const response = await fetch(config.backendUrl + '/user/login', {
+            console.log('registering with email:', form.email, 'and password:', form.password);
+            const response = await fetch(config.backendUrl + '/user/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({email, password})
+                body: JSON.stringify({
+                    email: form.email,
+                    password: form.password,
+                    username: usernameToInsert,
+                    picture: pictureToInsert
+                })
             });
 
             if (response.ok) {
                 const data = await response.json();
-                User.login(data, remember)
-                console.log('Login successful with: ', data._id)
-                navigation('/')
+                console.log('Register successful', data);
+                navigation('/login')
                 return;
             }
 
@@ -45,14 +66,14 @@ function LoginPage() {
             setErrorMessage(r.error)
             console.error('something went wrong: ', response)
         } catch (error) {
-            console.error('login failed', error);
+            console.error('registering failed', error);
             setErrorMessage('Something went wrong.')
         }
     };
 
     useEffect(() => {
         setErrorMessage('')
-    }, [email, password]);
+    }, [form]);
 
     return (
         <div className="container vh-100 align-content-center">
@@ -66,50 +87,63 @@ function LoginPage() {
                                 </div>
                                 <div className="col-lg-6 p-5">
                                     <div className="text-center">
-                                        <h1 className="h4 text-gray-900 mb-4">Welcome back!</h1>
+                                        <h1 className="h4 text-gray-900 mb-4">Create an free account!</h1>
                                     </div>
                                     <form className="user" onSubmit={handleSubmit}>
                                         <div className="form-group">
                                             <input
                                                 type="email"
+                                                name="email"
                                                 className="form-control form-control-user"
                                                 aria-describedby="emailHelp"
-                                                placeholder="Email address"
-                                                value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
+                                                placeholder="Email address*"
+                                                value={form.email}
+                                                onChange={handleChange}
                                                 required
                                             />
                                         </div>
                                         <div className="form-group mb-2">
                                             <input
                                                 type="password"
+                                                name="password"
                                                 className="form-control form-control-user"
-                                                placeholder="Password"
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
+                                                placeholder="Password*"
+                                                value={form.password}
+                                                onChange={handleChange}
                                                 required
                                             />
                                         </div>
+                                        <hr/>
                                         <div className="form-group">
-                                            <div className="custom-control custom-checkbox small">
-                                                <input type="checkbox"
-                                                       className="custom-control-input"
-                                                       id="customCheck"
-                                                       checked={remember}
-                                                       onChange={(e) => setRemember(e.target.checked)}/>
-                                                <label className="custom-control-label" htmlFor="customCheck">Remember Me</label>
-                                            </div>
+                                            <input
+                                                type="text"
+                                                name='username'
+                                                className="form-control form-control-user"
+                                                placeholder="Username"
+                                                value={form.username}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <input
+                                                type="url"
+                                                name='picture'
+                                                className="form-control form-control-user"
+                                                placeholder="Profile picture as link"
+                                                value={form.picture}
+                                                onChange={handleChange}
+                                            />
                                         </div>
                                         <h3 className={'invalid-feedback d-block text-center'}
                                             style={{minHeight: 16}}>{errorMessage}</h3>
                                         <button type="submit" className="btn btn-primary btn-user btn-block">
-                                            Login
+                                            Register
                                         </button>
                                     </form>
                                     <hr/>
                                     <div className="text-center">
-                                        <button className="btn btn-link btn-sm" onClick={() => navigation('/register')}>
-                                            Create new account
+                                        <button className="btn btn-link btn-sm" onClick={() => navigation('/login')}>
+                                            Log in existing account
                                         </button>
                                     </div>
                                 </div>
@@ -122,4 +156,4 @@ function LoginPage() {
     );
 }
 
-export default LoginPage;
+export default RegisterPage;
