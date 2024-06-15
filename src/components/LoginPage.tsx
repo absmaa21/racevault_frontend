@@ -9,17 +9,26 @@ function LoginPage() {
     const navigation = useNavigate()
     const User = useContext(UserContext)!;
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [remember, setRemember] = useState(true)
+    const [form, setForm] = useState({
+        email: '',
+        password: '',
+        remember: true,
+    })
     const [errorMessage, setErrorMessage] = useState('');
+
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setForm((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value
+        }))
+    }
 
     const emailRegex = RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-z0-9.-]+\\.[a-zA-Z]{2,}$')
 
     const handleSubmit = async (e: any) => {
         e.preventDefault()
 
-        if(!emailRegex.test(email)) {
+        if (!emailRegex.test(form.email)) {
             setErrorMessage('Invalid Email!')
             return;
         }
@@ -30,12 +39,12 @@ function LoginPage() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({email, password})
+                body: JSON.stringify({email: form.email, password: form.password})
             });
 
             if (response.ok) {
                 const data = await response.json();
-                User.login(data, remember)
+                User.login(data, form.remember)
                 console.log('Login successful with: ', data._id)
                 navigation('/')
                 return;
@@ -52,7 +61,7 @@ function LoginPage() {
 
     useEffect(() => {
         setErrorMessage('')
-    }, [email, password]);
+    }, [form.email, form.password]);
 
     return (
         <div className="container vh-100 align-content-center">
@@ -72,32 +81,39 @@ function LoginPage() {
                                         <div className="form-group">
                                             <input
                                                 type="email"
+                                                name="email"
                                                 className="form-control form-control-user"
                                                 aria-describedby="emailHelp"
                                                 placeholder="Email address"
-                                                value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
+                                                value={form.email}
+                                                onChange={handleChange}
                                                 required
                                             />
                                         </div>
                                         <div className="form-group mb-2">
                                             <input
                                                 type="password"
+                                                name="password"
                                                 className="form-control form-control-user"
                                                 placeholder="Password"
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
+                                                value={form.password}
+                                                onChange={handleChange}
                                                 required
                                             />
                                         </div>
                                         <div className="form-group">
                                             <div className="custom-control custom-checkbox small">
                                                 <input type="checkbox"
+                                                       name="remember"
                                                        className="custom-control-input"
                                                        id="customCheck"
-                                                       checked={remember}
-                                                       onChange={(e) => setRemember(e.target.checked)}/>
-                                                <label className="custom-control-label" htmlFor="customCheck">Remember Me</label>
+                                                       checked={form.remember}
+                                                       onChange={(e) => setForm((prev) => ({
+                                                           ...prev,
+                                                           remember: e.target.checked
+                                                       }))}/>
+                                                <label className="custom-control-label" htmlFor="customCheck">Remember
+                                                    Me</label>
                                             </div>
                                         </div>
                                         <h3 className={'invalid-feedback d-block text-center'}
