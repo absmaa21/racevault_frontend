@@ -17,9 +17,15 @@ const UserProvider: FC<UserProviderProps> = ({children}: any) => {
     const [user, setUser] = useState<IUser | null>(null);
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser))
+        try {
+            const storedUser = localStorage.getItem('user');
+            if (storedUser) {
+                setUser(JSON.parse(storedUser))
+            }
+        } catch (e: any) {
+            console.log('Error while getting localStorage')
+            console.log('Deleting localStorage...')
+            logout()
         }
     }, []);
 

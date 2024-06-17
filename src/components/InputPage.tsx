@@ -1,23 +1,62 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Alert, Grow} from "@mui/material";
+import config from "../config";
+import {UserContext} from "../contexts/UserContext";
 
 function InputPage() {
+    const User = useContext(UserContext)
     const [form, setForm] = useState({
         game: '',
         event: '',
         circuit: '',
         vehicle: '',
         start_date: Date.now(),
-        position_qualifying_overall: 0,
-        position_race_overall: 0,
-        position_qualifying_class: 0,
-        position_race_class: 0,
+        duration: undefined,
+        position_qualifying_overall: undefined,
+        position_race_overall: undefined,
+        position_qualifying_class: undefined,
+        position_race_class: undefined,
     })
     const [justAddedNewRace, setJustAddedNewRace] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
 
-    function handelSubmit(e: React.FormEvent) {
+    async function handelSubmit(e: React.FormEvent) {
         e.preventDefault()
-        setJustAddedNewRace(true)
+
+        try {
+            const response = await fetch(config.backendUrl + '/races/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: User?.user?.id,
+                    game: form.game,
+                    event: form.event,
+                    circuit: form.circuit,
+                    vehicle: form.vehicle,
+                    start_date: form.start_date,
+                    duration: form.duration,
+                    position_qualifying_overall: form.position_qualifying_overall,
+                    position_race_overall: form.position_race_overall,
+                    position_qualifying_class: form.position_qualifying_class,
+                    position_race_class: form.position_race_class,
+                })
+            });
+
+            if (response.ok) {
+                console.log('Race add was successful!')
+                setJustAddedNewRace(true)
+                return;
+            }
+
+            const r = await response.json()
+            setErrorMessage(r.error)
+            console.error('something went wrong: ', response)
+        } catch (error) {
+            console.error('login failed', error);
+            setErrorMessage('Something went wrong.')
+        }
     }
 
     function handelChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -37,7 +76,7 @@ function InputPage() {
         <div className={'container vh-100 align-content-center'}>
             <Grow in={justAddedNewRace}>
                 <Alert severity={'success'} className={'position-absolute bottom-0 end-0 m-2'}>
-                    Successfully submitted a new race.
+                    Successfully added a new race.
                 </Alert>
             </Grow>
             <form onSubmit={handelSubmit}>
@@ -93,6 +132,18 @@ function InputPage() {
                             className="form-control text-black"
                             placeholder="Start date"
                             value={form.start_date}
+                            onChange={handelChange}
+                            required
+                        />
+                    </div>
+                    <div className={'form-group'}>
+                        <input
+                            name="duration"
+                            type="number"
+                            min={1}
+                            className="form-control text-black"
+                            placeholder="Race duration (minutes)"
+                            value={form.duration}
                             onChange={handelChange}
                             required
                         />
