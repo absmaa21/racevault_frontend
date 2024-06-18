@@ -50,7 +50,7 @@ function Layout() {
                         <hr className={'sidebar-divider'}/>
                         <div className={'sidebar-heading'}>Races</div>
                         <NavItem path={'/input'} title={'Input'} icon={'bi-car-front-fill'}/>
-                        <NavItem path={'/races'} title={'Races'} icon={'bi-table'}/>
+                        <NavItem path={'/racesTable'} title={'Races'} icon={'bi-table'}/>
                     </div>
 
                     <ProfileWithDropdown />
