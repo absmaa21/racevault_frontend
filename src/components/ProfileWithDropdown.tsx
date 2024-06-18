@@ -43,7 +43,7 @@ function ProfileWithDropdown() {
                 <h6 className={'text-white ml-2 d-flex flex-column'}>
                     {User?.user?.username}
                     <span
-                        className={'small text-white-50'}>{User?.user?.races.length} {User?.user?.races.length === 1 ? 'Race' : 'Races'}</span>
+                        className={'small text-white-50'}>{User?.user?.num_of_races ?? 0} {User?.user?.num_of_races === 1 ? 'Race' : 'Races'}</span>
                 </h6>
             </button>
             <Dialog open={showLogoutDialog} onClose={toggleLogoutDialog} classes={{paper: 'rounded-5'}}>

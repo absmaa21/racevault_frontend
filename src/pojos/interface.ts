@@ -6,7 +6,7 @@ export interface IUser {
     username: string,
     last_login?: number,
     register_date: number,
-    races: IUserRace[],
+    num_of_races: number,
 }
 
 export interface IUserRace {

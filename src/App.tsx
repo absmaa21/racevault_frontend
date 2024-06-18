@@ -9,6 +9,7 @@ import Layout from "./components/Layout";
 import InputPage from "./components/InputPage";
 import {UserProvider} from "./contexts/UserContext";
 import RacesTable from "./components/RacesTable";
+import ShowRacesPage from "./components/ShowRacesPage";
 
 function App() {
     return (
@@ -20,7 +21,7 @@ function App() {
                         <Route path="/register" element={<RegisterPage/>}/>
                         <Route path="/overview" element={<OverviewPage/>}/>
                         <Route path="/input" element={<InputPage/>}/>
-                        <Route path="/racesTable" element={<RacesTable/>}/>
+                        <Route path="/racesTable" element={<ShowRacesPage/>}/>
                     </Route>
                 </Routes>
             </BrowserRouter>

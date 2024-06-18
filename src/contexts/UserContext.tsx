@@ -1,5 +1,6 @@
 import React, {createContext, useState, useEffect, ReactNode, FC} from 'react';
 import {IUser} from "../pojos/interface";
+import config from "../config";
 
 interface UserContextType {
     user: IUser | null;
@@ -20,7 +21,17 @@ const UserProvider: FC<UserProviderProps> = ({children}: any) => {
         try {
             const storedUser = localStorage.getItem('user');
             if (storedUser) {
-                setUser(JSON.parse(storedUser))
+                const parsedUser = JSON.parse(storedUser)
+                fetch(config.backendUrl + `/user/${parsedUser.id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                })
+                    .then(r => {
+                        if (!r.ok) return
+                        r.json().then(data => login(data, true))
+                    })
             }
         } catch (e: any) {
             console.log('Error while getting localStorage')
@@ -31,7 +42,7 @@ const UserProvider: FC<UserProviderProps> = ({children}: any) => {
 
     const login = (user: IUser, remember?: boolean) => {
         setUser(user);
-        if(remember) localStorage.setItem('user', JSON.stringify(user));
+        if (remember) localStorage.setItem('user', JSON.stringify(user));
     };
 
     const logout = () => {
