@@ -42,10 +42,11 @@ function LoginPage() {
                 body: JSON.stringify({email: form.email, password: form.password})
             });
 
+            console.log(response.status)
             if (response.ok) {
                 const data = await response.json();
                 User.login(data, form.remember)
-                console.log('Login successful with: ', data._id)
+                console.log('Login successful with: ', data.id)
                 navigation('/')
                 return;
             }
