@@ -23,7 +23,7 @@ function Layout() {
         if(showLayout) return;
         navigation('/')
     }, [User, navigation, showLayout]);
-
+    // <NavItem path={'/'} title={'Dashboard'} icon={'bi-speedometer'} index/>
     return (
         <div className={'d-flex'}>
             {showLayout && (
@@ -46,11 +46,10 @@ function Layout() {
                             />
                         </button>
                         <hr className={'sidebar-divider my-0'}/>
-                        <NavItem path={'/'} title={'Dashboard'} icon={'bi-speedometer'} index/>
                         <hr className={'sidebar-divider'}/>
                         <div className={'sidebar-heading'}>Races</div>
                         <NavItem path={'/input'} title={'Input'} icon={'bi-car-front-fill'}/>
-                        <NavItem path={'/racesTable'} title={'Races'} icon={'bi-table'}/>
+                        <NavItem path={'/races'} title={'Races'} icon={'bi-table'} index/>
                     </div>
 
                     <ProfileWithDropdown />
